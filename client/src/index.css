@@ -1,0 +1,51 @@
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    @apply w-full border my-1 py-2 px-3 rounded-2xl;
+}
+
+button {
+    @apply bg-gray-300;
+}
+button.primary{
+    background-color: '#F5385D';
+    @apply bg-primary p-2 w-full text-white rounded-2xl;
+
+} */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Directly apply Tailwind utility classes to input elements */
+input[type="text"],
+input[type="password"],
+input[type="email"] ,
+input[type="number"] {
+    width: 100%;
+    border: 1px solid;
+    margin-top: 1rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+}
+textarea{
+    @apply w-full border my-1 py-2 px-3 rounded-2xl;
+}
+
+/* Apply Tailwind utility classes to buttons */
+button {
+    background-color: red; /* Red background for all buttons */
+}
+
+/* Apply Tailwind utility classes to buttons with the .primary class */
+button.primary {
+    background-color: #F5385D; /* Custom background color */
+    padding: 0.5rem 1rem; /* Additional padding */
+    width: 100%; /* Full width */
+    color: white; /* White text color */
+    border-radius: 0.5rem; /* Rounded corners */
+}
