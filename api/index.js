@@ -40,7 +40,9 @@ import cookieParser from 'cookie-parser';
 import imageDownloader from 'image-downloader';
 import { fileURLToPath } from 'url';
 import path from 'path';
-
+import multer from 'multer';
+import * as fs from 'fs';
+import sharp from 'sharp';
 
 
 // Load environment variables from .env file
@@ -51,6 +53,8 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 const MONGO_URL = process.env.MONGO_URL;
 const JWT_SECRET = process.env.JWT_SECRET || 'default_secret'; // Use a default secret if not provided in env
+
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -124,20 +128,63 @@ app.post('/logout',(req,res)=>{
 })
 
 
+app.post('/api/upload-by-link', async (req, res) => {
+  const { link } = req.body;
 
-app.post('/api/upload-by-link', async (req,res) => {
-  const {link} = req.body;
-  const newName = 'photo' + Date.now() + '.jpg';
-  await imageDownloader.image({
-    url: link,
-    dest: '/uploads/' +newName,
-  });
-  const url = await uploadToS3('/uploads/' +newName, newName, mime.lookup('/uploads/' +newName));
-  res.json(url);
+  // Implement image download logic here
+  try {
+    // Download the image from the provided link
+    const newName = 'photo' + Date.now() + '.jpg';
+    await imageDownloader.image({
+      url: link,
+      dest: path.join(__dirname, '/uploads', newName) // Save the image to the local 'uploads' directory
+    });
+
+    // If the image download is successful, respond with the new image URL
+    const imageUrl = `http://localhost:4000/uploads/${newName}`; // Assuming your server is running locally on port 4000
+    res.json({ imageUrl });
+  } catch (error) {
+    console.error('Error downloading image:', error);
+    res.status(500).json({ error: 'Failed to download image' });
+  }
 });
+ const photoMiddleware = multer({dest:'uploads'});
+// app.post('/uploads', photoMiddleware.array('photos',1000),(req, res) =>{
+//   const uploadedFiles = [];
+//   for( let i =0 ;i<req.files.length;i++){
+//     const {path,originalname} = req.files[i];
+//     const parts = originalname.split('.');
+//     const ext = parts[parts.length -1];
+//     const newPath = path + '.'+ext;
+//     fs.renameSync(path, newPath);
+//     uploadedFiles.push(newPath);
+//   }
+//   res.json(uploadedFiles);
+// });
 
-// const photosMiddleware = multer({dest:'/uploads'});
 
+app.post('/uploads', photoMiddleware.array('photos', 1000), async (req, res) => {
+    try {
+        const uploadedFiles = [];
+        for (let i = 0; i < req.files.length; i++) {
+            const { path, originalname } = req.files[i];
+            const parts = originalname.split('.');
+            const ext = parts[parts.length - 1];
+            const newPath = path + '.' + ext;
+            fs.renameSync(path, newPath);
+
+            // Convert to .webp format using sharp
+            const webpPath = newPath.replace(/\.[^.]+$/, '.webp'); // Replace extension with .webp
+            await sharp(newPath).toFormat('webp').toFile(webpPath);
+
+            uploadedFiles.push(webpPath);
+        }
+        res.json(uploadedFiles);
+    } catch (error) {
+        console.error('Error uploading and converting files:', error);
+        res.status(500).json({ error: 'Failed to upload and convert files' });
+    }
+});
 
 // Connect to MongoDB
 async function startServer() {
