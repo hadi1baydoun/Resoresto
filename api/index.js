@@ -41,7 +41,7 @@ import imageDownloader from 'image-downloader';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import multer from 'multer';
-import * as fs from 'fs';
+import fs from 'fs';
 import sharp from 'sharp';
 
 
@@ -148,43 +148,71 @@ app.post('/api/upload-by-link', async (req, res) => {
     res.status(500).json({ error: 'Failed to download image' });
   }
 });
- const photoMiddleware = multer({dest:'uploads'});
-// app.post('/uploads', photoMiddleware.array('photos',1000),(req, res) =>{
-//   const uploadedFiles = [];
-//   for( let i =0 ;i<req.files.length;i++){
-//     const {path,originalname} = req.files[i];
-//     const parts = originalname.split('.');
-//     const ext = parts[parts.length -1];
-//     const newPath = path + '.'+ext;
-//     fs.renameSync(path, newPath);
-//     uploadedFiles.push(newPath);
-//   }
-//   res.json(uploadedFiles);
+
+
+
+// const photoMiddleware = multer({dest:'uploads'});
+
+// app.post('/uploads', photoMiddleware.array('photos', 1000), async (req, res) => {
+//     try {
+//         const uploadedFiles = [];
+//         for (let i = 0; i < req.files.length; i++) {
+//             const { path, originalname } = req.files[i];
+//             const parts = originalname.split('.');
+//             const ext = parts[parts.length - 1];
+//             const newPath = path + '.' + ext;
+//             fs.renameSync(path, newPath);
+
+//             // Convert to .webp format using sharp
+//             const webpPath = newPath.replace(/\.[^.]+$/, '.webp'); // Replace extension with .webp
+//             await sharp(newPath).toFormat('webp').toFile(webpPath);
+
+//             uploadedFiles.push(webpPath);
+//         }
+//         res.json(uploadedFiles);
+//     } catch (error) {
+//         console.error('Error uploading and converting files:', error);
+//         res.status(500).json({ error: 'Failed to upload and convert files' });
+//     }
 // });
 
-
-app.post('/uploads', photoMiddleware.array('photos', 1000), async (req, res) => {
-    try {
-        const uploadedFiles = [];
-        for (let i = 0; i < req.files.length; i++) {
-            const { path, originalname } = req.files[i];
-            const parts = originalname.split('.');
-            const ext = parts[parts.length - 1];
-            const newPath = path + '.' + ext;
-            fs.renameSync(path, newPath);
-
-            // Convert to .webp format using sharp
-            const webpPath = newPath.replace(/\.[^.]+$/, '.webp'); // Replace extension with .webp
-            await sharp(newPath).toFormat('webp').toFile(webpPath);
-
-            uploadedFiles.push(webpPath);
-        }
-        res.json(uploadedFiles);
-    } catch (error) {
-        console.error('Error uploading and converting files:', error);
-        res.status(500).json({ error: 'Failed to upload and convert files' });
-    }
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, path.join(__dirname, '/uploads'));
+  },
+  filename: (req, file, cb) => {
+      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
 });
+
+const upload = multer({ storage });
+
+// POST endpoint for uploading files
+app.post('/uploads', upload.array('photos', 10), async (req, res) => {
+  try {
+      const uploadedFiles = [];
+
+      // Process each uploaded file
+      for (const file of req.files) {
+          const imagePath = file.path;
+          const filename = file.filename;
+
+          // Perform image processing (e.g., convert to .webp format)
+          const outputPath = imagePath + '.webp';
+          await sharp(imagePath).toFormat('webp').toFile(outputPath);
+
+          // Store the filename (with .webp extension) in the list of uploaded files
+          uploadedFiles.push(path.basename(outputPath));
+      }
+
+      // Respond with the array of filenames
+      res.json(uploadedFiles);
+  } catch (error) {
+      console.error('Error uploading files:', error);
+      res.status(500).json({ error: 'Failed to upload files' });
+  }
+});
+
 
 // Connect to MongoDB
 async function startServer() {
