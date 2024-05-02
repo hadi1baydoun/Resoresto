@@ -41,9 +41,9 @@ import imageDownloader from 'image-downloader';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import multer from 'multer';
-import fs from 'fs';
 import sharp from 'sharp';
-
+import fs from 'fs';
+import Place from './models/Place.js';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -58,7 +58,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'default_secret'; // Use a default 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
+ 
 // Middleware
 app.use(express.json()); // Parse JSON bodies
 app.use(cookieParser()); // Parse cookies
@@ -192,7 +192,7 @@ app.post('/uploads', upload.array('photos', 10), async (req, res) => {
   try {
       const uploadedFiles = [];
 
-      // Process each uploaded file
+      
       for (const file of req.files) {
           const imagePath = file.path;
           const filename = file.filename;
@@ -212,6 +212,53 @@ app.post('/uploads', upload.array('photos', 10), async (req, res) => {
       res.status(500).json({ error: 'Failed to upload files' });
   }
 });
+
+app.post('/places', async (req, res) => {
+  const { token } = req.cookies;
+  const {
+    title,
+    address,
+    addedPhotos,
+    description,
+    perks,
+    extraInfo,
+    openHours,
+    closeHours,
+    numbPers,
+  } = req.body;
+
+  try {
+    // Verify JWT token for authentication
+    const decoded = jwt.verify(token, JWT_SECRET);
+
+    // Create a new place entry in the database
+    const placeDoc = await Place.create({
+      owner: decoded.id, // Using the decoded user ID from the token as the owner
+      title,
+      address,
+      addedPhotos,
+      description,
+      perks,
+      extraInfo,
+      openHours,
+      closeHours,
+      numbPers,
+    });
+
+    // Respond with the newly created place data
+    res.status(201).json({ place: placeDoc });
+  } catch (error) {
+    console.error('Error creating place:', error);
+
+    // Handle specific error scenarios
+    if (error.name === 'JsonWebTokenError') {
+      res.status(401).json({ error: 'Invalid token' });
+    } else {
+      res.status(500).json({ error: 'Failed to create place' });
+    }
+  }
+});
+
 
 
 // Connect to MongoDB

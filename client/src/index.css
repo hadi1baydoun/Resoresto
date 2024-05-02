@@ -49,3 +49,25 @@ button.primary {
     color: white; /* White text color */
     border-radius: 0.5rem; /* Rounded corners */
 }
+
+/* Responsive image styling */
+img {
+    display: block; /* Ensures images behave as block elements */
+    width: 100%; /* Set width to 100% of parent container */
+    height: auto; /* Automatically adjust height to maintain aspect ratio */
+    object-fit: cover; /* Scale image while maintaining aspect ratio */
+    border-radius: 10px; /* Adds rounded corners for a nicer appearance */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
+    margin-bottom: 10px; /* Adds spacing between images */
+}
+
+
+/* Rounded corners for images */
+.rounded-lg {
+    border-radius: 0.5rem;
+}
+
+/* Styling for file upload button */
+input[type="file"].hidden {
+    display: none;
+}
