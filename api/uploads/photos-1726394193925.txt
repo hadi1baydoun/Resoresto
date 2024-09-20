@@ -1,0 +1,102 @@
+
+EX1:
+
+1. Ctrl+Enter: Inserts a page break, moving the insertion point to the next page.
+2. Find and Replace Command on Edit menu: Opens the dialog box for finding and replacing text.
+3. Page Number from Insert Menu: Allows you to add page numbers to the document.
+4. Save as: Saves a copy of the document in a new location or with a different name.
+5. Indentation: The space between the margin and the beginning of a paragraph.
+6. Endnote: Notes placed at the end of the document, used for citations or additional information.
+7. Footer: The section at the bottom of each page, which can include text like page numbers.
+8. 102.89: An unsupported font size in Word, as Word typically supports standard font sizes.
+9. doc: The extension for Word files in versions 97-2003.
+10. 3: You can save a document in Word by clicking Save, Save As, or using keyboard shortcuts.
+11. Left: The default alignment for English text is left-aligned.
+12. Copy and Paste Text Format: The Format Painter copies and applies the format of text elsewhere.
+13. Yes: Word allows you to insert pictures from online sources.
+14. Yes: Table captions are typically placed above the table.
+15. Yes: Figure captions are placed above the figure.
+16. No: Figure and table captions don't necessarily have to follow the same format.
+17. Multilevel list: Used to organize sections and subsections (1, 1.1, 1.1.1, etc.).
+18. Both a & b: The list of figures can be placed at the beginning or on any page of the document.
+19. Both a & b: The list of tables can also be placed at the beginning or on any page.
+20. Cover Page: The first page in a document, often containing the title and author information.
+21. Insert citation: Used to add a reference from a source in the document text.
+22. Insert bibliography: Creates a list of all references or citations used in the document.
+23. Cross reference: Refers to figures or other sections elsewhere in the document.
+24. rand(): Generates random text for testing or filler content.
+25. Citation: APA is a citation style used for referencing sources in academic writing.
+
+
+EX2:
+
+Heading 1 is used for main sections and should be applied once per section. Heading 2 is for subheadings under Heading 1. "Restart numbering" resets list numbering for new sections. A Table of Contents (TOC) lists sections and is generated from heading styles. Update the TOC via the References Tab to reflect document changes.
+
+
+EX3:
+
+
+
+1. Bulleted List vs. Numbered List: A bulleted list uses symbols (e.g., dots) to organize items without implying a sequence, while a numbered list uses numbers to indicate a specific order or sequence.
+
+2. Find Command: The Find Command is used to locate specific text or characters within a document.
+
+3. Elements in Header and Footer: Elements that can be inserted in a document's header and footer include page numbers, date and time, document title, author name, and company logo.
+
+4. Footnote vs. Endnote: Footnotes appear at the bottom of the page where the reference is made, while endnotes appear at the end of the document or section.
+
+5. Document Margins: Document margins are the blank spaces around the edges of a page, defining the area where text and content can be placed.
+
+
+EX4:
+
+
+3. Table of Contents (TOC): A TOC lists the titles and page numbers of the document's sections and subsections, generated from the styles applied (e.g., Heading 1, Heading 2). It can be updated via the References Tab by selecting Update Table, choosing "Update page numbers only" or "Update entire table."
+
+4. Numbering Figures: Figures can be numbered by inserting captions and using the Insert Caption feature. To relate them to headings, you can use styles to create a List of Figures. This list can be inserted from the References Tab by selecting Insert Table of Figures.
+
+
+
+EX5:
+
+
+1. Move Insertion Point to Next Page:  
+   a. Ctrl+Enter
+
+2. Display Find and Replace Dialog Box:  
+   a. Find and Replace Command on Edit menu (Note: Ctrl+H is the shortcut for Find and Replace)
+
+3. Insert Page Number:  
+   a. Page Number from Insert Menu
+
+4. Save Existing Document in a New File:  
+   a. Save As
+
+5. Space Between Margin and Start of Paragraph:  
+   a. Indentation
+
+6. Placed at the End of a Document:  
+   b. Endnote
+
+7. Printed at the Bottom of Each Page:  
+   a. Footer
+
+8. Unsupported Font Size:  
+   b. 102.89
+
+9. Extension of Files Created in MS-Word 97-2003:  
+   b. doc
+
+10. Ways to Save a Document:  
+   b. 3 (Save and Save As and save a copy)
+
+
+EX6:
+
+3-from the references tab , we can insert a table of Contents what is a table of contents and how is related in the styles in the document ? how can a table of contents be updated?
+
+Response: 
+A Table of Contents (TOC) lists the main sections and page numbers of a document and is based on heading styles like Heading 1 and Heading 2. To update the TOC after changes, go to the References Tab and select Update Table, choosing to update either page numbers only or the entire table.
+
+
+									GOOD LUCK :)

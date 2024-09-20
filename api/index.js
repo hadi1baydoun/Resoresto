@@ -1,34 +1,4 @@
 
-// import express from 'express';
-// import cors from 'cors';
-// import mongoose from 'mongoose';
-// const mongoose = require('mongoose');
-// require('dotenv').config()
-// const app = express();
-
-// app.use(express.json());
-// app.use(cors({
-//   credentials: true,
-//   origin: 'http://localhost:5173'
-// }));
-
-
-// mongoose.connect(process.env.MONGO_URL);
-
-
-// app.get('/test', (req, res) => {
-//   res.json('test ok');
-// });
-// app.post('/register',(req,res)=>{
-//   const {name,email,password} = req.body;
-//   res.json({name,email,password});
-
-// });
-
-
-
-// app.listen(4000);
-
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
@@ -150,32 +120,6 @@ app.post('/api/upload-by-link', async (req, res) => {
 });
 
 
-
-// const photoMiddleware = multer({dest:'uploads'});
-
-// app.post('/uploads', photoMiddleware.array('photos', 1000), async (req, res) => {
-//     try {
-//         const uploadedFiles = [];
-//         for (let i = 0; i < req.files.length; i++) {
-//             const { path, originalname } = req.files[i];
-//             const parts = originalname.split('.');
-//             const ext = parts[parts.length - 1];
-//             const newPath = path + '.' + ext;
-//             fs.renameSync(path, newPath);
-
-//             // Convert to .webp format using sharp
-//             const webpPath = newPath.replace(/\.[^.]+$/, '.webp'); // Replace extension with .webp
-//             await sharp(newPath).toFormat('webp').toFile(webpPath);
-
-//             uploadedFiles.push(webpPath);
-//         }
-//         res.json(uploadedFiles);
-//     } catch (error) {
-//         console.error('Error uploading and converting files:', error);
-//         res.status(500).json({ error: 'Failed to upload and convert files' });
-//     }
-// });
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
       cb(null, path.join(__dirname, '/uploads'));
@@ -236,7 +180,7 @@ app.post('/places', async (req, res) => {
       owner: decoded.id, // Using the decoded user ID from the token as the owner
       title,
       address,
-      addedPhotos,
+      photos:addedPhotos,
       description,
       perks,
       extraInfo,
@@ -259,6 +203,37 @@ app.post('/places', async (req, res) => {
   }
 });
 
+// app.get('/places',(req, res) =>{
+//   const { token } = req.cookies;
+//   jwt.verify(token, JWT_SECRET, {}, async (err, userData)=>{
+//     res.json(await Place.find({owner:id}));
+//   });
+
+// });
+
+app.get('/places', async (req, res) => {
+  try {
+    const { token } = req.cookies;
+
+    // Verify JWT token
+    const decoded = jwt.verify(token, JWT_SECRET);
+
+    // Retrieve places belonging to the authenticated user (owner)
+    const places = await Place.find({ owner: decoded.id });
+
+    // Respond with the list of places
+    res.json({ places });
+  } catch (error) {
+    console.error('Error fetching places:', error);
+
+    // Handle specific error scenarios
+    if (error.name === 'JsonWebTokenError') {
+      res.status(401).json({ error: 'Invalid token' });
+    } else {
+      res.status(500).json({ error: 'Failed to fetch places' });
+    }
+  }
+});
 
 
 // Connect to MongoDB
@@ -276,3 +251,4 @@ async function startServer() {
 }
 
 startServer();
+
