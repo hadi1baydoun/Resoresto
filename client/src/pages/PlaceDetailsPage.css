@@ -1,0 +1,18 @@
+.container {
+    max-width: 800px;
+    margin: auto;
+  }
+  
+  .carousel img {
+    border-radius: 10px;
+  }
+  
+  button {
+    transition: all 0.3s ease-in-out;
+  }
+  
+  button:hover {
+    transform: scale(1.05);
+    background-color: #4c6ef5;
+  }
+  

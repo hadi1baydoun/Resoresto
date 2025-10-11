@@ -11,6 +11,7 @@ const PlaceSchema = new mongoose.Schema({
     Open : Number,
     Close : Number,
     numbPers : Number,
+    tables: { type: Number, required: true, default: 0 }, 
 });
 
 const PlaceModel = mongoose.model('Place',PlaceSchema);
